@@ -66,7 +66,7 @@ if 'PublicationYear' not in libros_clasificados.columns:
     )
 
 # Definir las columnas a mostrar
-columnas_a_mostrar = ['Title', 'Author', 'PublicationYear', 'Relevancia']
+columnas_a_mostrar = ['Title', 'Authors', 'PublicationYear', 'Relevancia']
 
 # Mostrar los resultados sin índices
 print(libros_clasificados[columnas_a_mostrar].head(num_resultados).to_string(index=False))
