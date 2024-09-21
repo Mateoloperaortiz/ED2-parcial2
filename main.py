@@ -30,7 +30,7 @@ def calcular_relevancia(libro, palabra_clave_busqueda):
     anio_actual = datetime.now().year
     puntuacion_actualidad = (anio_actual - anio_publicacion) / 100.0  # Normalizar actualidad
 
-    # Puntuación de popularidad (basada en la columna Popularidad)
+    # Puntuación de popularidad (basada en la columna Popularity)
     puntuacion_popularidad = libro['Popularity'] / 10000.0  # Normalizar popularidad
 
     # Puntuación de calificación de usuario (combinar calificación y número de calificaciones)
@@ -56,9 +56,20 @@ libros_clasificados = libros_df.sort_values(by='Relevancia', ascending=False)
 # Solicitar al usuario cuántos resultados quiere ver
 num_resultados = int(input("\n¿Cuántos resultados desea ver? "))
 
-# Mostrar los resultados
+# Agregar más detalles en la presentación de resultados
 print("\nLos libros más relevantes son:\n")
-print(libros_clasificados[['Title', 'Relevancia']].head(num_resultados))
+
+# Crear una columna para el año de publicación si no existe
+if 'PublicationYear' not in libros_clasificados.columns:
+    libros_clasificados['PublicationYear'] = libros_clasificados['PublicationDate'].apply(
+        lambda x: x.split('-')[0] if isinstance(x, str) else 'Desconocido'
+    )
+
+# Definir las columnas a mostrar
+columnas_a_mostrar = ['Title', 'Author', 'PublicationYear', 'Relevancia']
+
+# Mostrar los resultados sin índices
+print(libros_clasificados[columnas_a_mostrar].head(num_resultados).to_string(index=False))
 
 # Opcional: Guardar los resultados en un archivo CSV
 guardar_csv = input("\n¿Desea guardar los resultados en un archivo CSV? (s/n): ")
